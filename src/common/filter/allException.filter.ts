@@ -1,6 +1,6 @@
 import { Catch, ExceptionFilter, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 
-import { Errors } from '../enum';
+import { Errors, RequestStatus } from '../enum';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -16,7 +16,10 @@ export class AllExceptionFilter implements ExceptionFilter {
         }
 
         reply.status(status).send({
+            status: RequestStatus.FAILURE,
+            statusCode: status,
             errors: response,
+            timestamp: new Date(),
         });
     }
 }
