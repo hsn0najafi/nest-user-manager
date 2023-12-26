@@ -4,6 +4,7 @@ import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
+import { setupDocumentation } from './document';
 import { AllExceptionFilter } from './common/filter';
 import { ResponseInterceptor } from './common/interceptor';
 
@@ -33,9 +34,14 @@ async function bootstrap() {
         }),
     );
 
+    const docPath = configService.getOrThrow('DOC_PATH');
+    setupDocumentation(app, docPath);
+
     const port = +configService.getOrThrow('PORT');
     await app.listen(port, '0.0.0.0');
 
+    logger.log(`Docs: http://0.0.0.0:${port}/${apiPath}`);
+    logger.log(`API:  http://0.0.0.0:${port}/${docPath}`);
     logger.verbose('Running ...');
 }
 bootstrap();
