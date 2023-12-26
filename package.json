@@ -27,8 +27,7 @@
         "@nestjs/platform-express": "^10.0.0",
         "@nestjs/platform-fastify": "^10.3.0",
         "reflect-metadata": "^0.1.13",
-        "rxjs": "^7.8.1",
-        "un": "^0.0.0"
+        "rxjs": "^7.8.1"
     },
     "devDependencies": {
         "@nestjs/cli": "^10.0.0",

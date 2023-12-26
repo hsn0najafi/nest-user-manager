@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+    app:
+        container_name: app
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: prod
+        restart: unless-stopped
+        ports:
+            - ${PORT}:${PORT}
+        env_file:
+            - .env
+        networks:
+            - net
+
+networks:
+    net:
+        driver: bridge
+        attachable: true

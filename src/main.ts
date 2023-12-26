@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
 
+const configService: ConfigService = new ConfigService();
 const logger = new Logger('----- APP -----');
 
 async function bootstrap() {
@@ -15,7 +17,8 @@ async function bootstrap() {
         }),
     );
 
-    await app.listen(3000, '0.0.0.0');
+    const port = +configService.getOrThrow('PORT');
+    await app.listen(port, '0.0.0.0');
 
     logger.verbose('Running ...');
 }
