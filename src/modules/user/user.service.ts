@@ -8,13 +8,28 @@ import { UserRepository } from './repository';
 export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    create(createUserDto: CreateUserDto) {}
+    create(createUserDto: CreateUserDto) {
+        this.userRepository.failIfEmailExists(createUserDto.email);
+        return this.userRepository.create(createUserDto);
+    }
 
-    findAll(paginationDto: unknown) {}
+    findAll(paginationDto: unknown) {
+        return this.userRepository.findAndCount(paginationDto);
+    }
 
-    findOne(id: string) {}
+    findOne(id: string) {
+        this.userRepository.failIfIDNotExists(id);
+        return this.userRepository.findOne(id);
+    }
 
-    update(id: string, updateUserDto: UpdateUserDto) {}
+    update(id: string, updateUserDto: UpdateUserDto) {
+        this.userRepository.failIfIDNotExists(id);
 
-    remove(id: string) {}
+        return this.userRepository.update(id, updateUserDto);
+    }
+
+    remove(id: string) {
+        this.userRepository.failIfIDNotExists(id);
+        return this.userRepository.delete(id);
+    }
 }
