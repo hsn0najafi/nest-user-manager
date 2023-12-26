@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './repository';
+import { Roles } from './enum';
 
 @Injectable()
 export class UserService {
@@ -13,8 +14,8 @@ export class UserService {
         return this.userRepository.create(createUserDto);
     }
 
-    findAll(paginationDto: unknown) {
-        return this.userRepository.findAndCount(paginationDto);
+    findAll(page: number, limit: number, sort: string, order: string, role?: Roles) {
+        return this.userRepository.findAndCount(page, limit, sort, order, role);
     }
 
     findOne(id: string) {
@@ -24,6 +25,10 @@ export class UserService {
 
     update(id: string, updateUserDto: UpdateUserDto) {
         this.userRepository.failIfIDNotExists(id);
+
+        if (updateUserDto.email) {
+            this.userRepository.failIfEmailExists(updateUserDto.email);
+        }
 
         return this.userRepository.update(id, updateUserDto);
     }

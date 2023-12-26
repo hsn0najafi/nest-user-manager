@@ -15,7 +15,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UUIDDto } from 'src/common/dto';
+import { PaginationDto, UUIDDto } from 'src/common/dto';
 
 @ApiTags('User')
 @Controller({
@@ -35,8 +35,14 @@ export class UserController {
     @ApiOperation({ summary: 'Get users by pagination' })
     @HttpCode(HttpStatus.OK)
     @Get()
-    findAll(@Query() paginationDto: unknown) {
-        return this.userService.findAll(paginationDto);
+    findAll(@Query() paginationDto: PaginationDto) {
+        return this.userService.findAll(
+            paginationDto.page,
+            paginationDto.limit,
+            paginationDto.sort,
+            paginationDto.order,
+            paginationDto.role,
+        );
     }
 
     @ApiOperation({ summary: 'Get one user by ID' })
